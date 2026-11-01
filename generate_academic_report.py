@@ -1,11 +1,16 @@
 """
 Script to generate the complete, exhaustive Academic Project Report in Microsoft Word (.docx) format.
-Chronological Section Order:
+Chronological Section Order with Code Implementation & Pseudocode:
 - 1.0 INTRODUCTION
 - 2.0 THE MODEL & MATHEMATICAL FORMULATION
-- 3.0 METHOD OF SOLUTIONS & SAFETY GUARDS
-- 4.0 SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH (How the user operates the system)
-- 5.0 RESULT AND DISCUSSION (The empirical observations & mathematical outcomes from the demonstration)
+- 3.0 METHOD OF SOLUTIONS, ALGORITHM PSEUDOCODE & CODE IMPLEMENTATION
+    ├── 3.1 Dual-Optimization Algorithm & Formal Pseudocode
+    ├── 3.2 Pure Vectorized NumPy Implementation (OptimizationEngine)
+    ├── 3.3 Analytic Landscape Implementations & Exact Partial Derivatives
+    ├── 3.4 Numerical Divergence Guards & Overflow Interception
+    └── 3.5 Interactive UI Implementation Architecture
+- 4.0 SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH
+- 5.0 RESULT AND DISCUSSION (Empirical Case Studies & Comparisons)
 - 6.0 CONCLUSION
 - 7.0 FUTURE SCOPE
 - REFERENCES
@@ -37,6 +42,47 @@ def set_cell_shading(cell, color_hex):
     """Set cell background color."""
     shading_elm = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{color_hex}"/>')
     cell._tc.get_or_add_tcPr().append(shading_elm)
+
+def add_code_block(doc, code_title, code_lines, language="Python / NumPy"):
+    """Creates a beautifully styled, high-contrast code snippet block."""
+    tbl = doc.add_table(rows=1, cols=1)
+    tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+    cell = tbl.cell(0, 0)
+    set_cell_shading(cell, "0F172A")  # Deep slate navy background
+    set_cell_margins(cell, top=140, bottom=140, left=180, right=180)
+
+    tcPr = cell._tc.get_or_add_tcPr()
+    borders = parse_xml(
+        f'<w:tcBorders {nsdecls("w")}>\n'
+        f'  <w:left w:val="single" w:sz="24" w:space="0" w:color="38BDF8"/>\n'
+        f'  <w:top w:val="single" w:sz="4" w:space="0" w:color="334155"/>\n'
+        f'  <w:right w:val="single" w:sz="4" w:space="0" w:color="334155"/>\n'
+        f'  <w:bottom w:val="single" w:sz="4" w:space="0" w:color="334155"/>\n'
+        f'</w:tcBorders>'
+    )
+    tcPr.append(borders)
+
+    # Title header line
+    p0 = cell.paragraphs[0]
+    p0.paragraph_format.space_before = Pt(0)
+    p0.paragraph_format.space_after = Pt(4)
+    r_hdr = p0.add_run(f"💻 {code_title} ({language})")
+    r_hdr.font.name = "Consolas"
+    r_hdr.font.bold = True
+    r_hdr.font.size = Pt(10)
+    r_hdr.font.color.rgb = RGBColor(56, 189, 248)  # Cyan
+
+    # Code body
+    p_code = cell.add_paragraph()
+    p_code.paragraph_format.space_before = Pt(2)
+    p_code.paragraph_format.space_after = Pt(2)
+    p_code.paragraph_format.line_spacing = 1.15
+    r_code = p_code.add_run(code_lines)
+    r_code.font.name = "Consolas"
+    r_code.font.size = Pt(9.0)
+    r_code.font.color.rgb = RGBColor(241, 245, 249)  # Crisp white-slate
+
+    doc.add_paragraph().paragraph_format.space_after = Pt(4)
 
 def add_formula_card(doc, formula_title, formula_text, plain_explanation=""):
     """Creates a beautifully styled, shaded formula box with plain-language explanation."""
@@ -345,7 +391,7 @@ def build_academic_report():
     doc.add_page_break()
 
     # -------------------------------------------------------------------------
-    # PAGE 4: TABLE OF CONTENTS (Chronological Sequence)
+    # PAGE 4: TABLE OF CONTENTS (Updated with Section 3.0 Code Implementation)
     # -------------------------------------------------------------------------
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -371,24 +417,26 @@ def build_academic_report():
         ("         2.2.3 Ackley's Multimodal Surface", "7"),
         ("         2.2.4 Hyperbolic Saddle Point", "8"),
         ("    2.3  System Architecture and Processing Pipeline", "9"),
-        ("3.0  METHOD OF SOLUTIONS & SAFETY GUARDS", "10"),
-        ("    3.1  Iterative Update Mechanism", "10"),
-        ("    3.2  Convergence Stopping Rule (||∇f|| < ε)", "10"),
-        ("    3.3  Numerical Divergence & Overflow Protection", "11"),
-        ("    3.4  Interactive Visualization Architecture", "11"),
-        ("4.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH", "12"),
-        ("    4.1  User Interface Structural Breakdown (The 3 Panels)", "12"),
-        ("    4.2  Step-by-Step Live Demonstration Protocol", "13"),
-        ("    4.3  Real-Time Interactive Telemetry & CSV Export", "14"),
-        ("5.0  RESULT AND DISCUSSION", "15"),
-        ("    5.1  Case Study 1: The Symmetric Bowl (Smooth Linear Convergence)", "15"),
-        ("    5.2  Case Study 2: Rosenbrock Valley (Cross-Canyon Oscillation)", "16"),
-        ("    5.3  Case Study 3: Ackley's Surface (Trapped in Local Basins)", "17"),
-        ("    5.4  Case Study 4: Hyperbolic Saddle Point (Orthogonal Trajectories)", "18"),
-        ("    5.5  Comparative Quantitative Telemetry Summary", "19"),
-        ("6.0  CONCLUSION", "20"),
-        ("7.0  FUTURE SCOPE", "21"),
-        ("REFERENCES", "22"),
+        ("3.0  METHOD OF SOLUTIONS & CODE IMPLEMENTATION", "10"),
+        ("    3.1  Formal Pseudocode: Dual Optimization Engine", "10"),
+        ("    3.2  Pure NumPy Optimization Backend (engine.py)", "11"),
+        ("    3.3  Analytic Topologies & Gradients Backend (landscapes.py)", "12"),
+        ("    3.4  Convergence Stopping Rule (||∇f|| < ε)", "13"),
+        ("    3.5  Numerical Divergence Guards & Overflow Interception", "13"),
+        ("    3.6  Interactive Dashboard Implementation (app.py)", "14"),
+        ("4.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH", "15"),
+        ("    4.1  User Interface Structural Breakdown (The 3 Panels)", "15"),
+        ("    4.2  Step-by-Step Live Demonstration Protocol", "16"),
+        ("    4.3  Real-Time Interactive Telemetry & CSV Export", "17"),
+        ("5.0  RESULT AND DISCUSSION", "18"),
+        ("    5.1  Case Study 1: The Symmetric Bowl (Smooth Linear Convergence)", "18"),
+        ("    5.2  Case Study 2: Rosenbrock Valley (Cross-Canyon Oscillation)", "19"),
+        ("    5.3  Case Study 3: Ackley's Surface (Trapped in Local Basins)", "20"),
+        ("    5.4  Case Study 4: Hyperbolic Saddle Point (Orthogonal Trajectories)", "21"),
+        ("    5.5  Comparative Quantitative Telemetry Summary", "22"),
+        ("6.0  CONCLUSION", "23"),
+        ("7.0  FUTURE SCOPE", "24"),
+        ("REFERENCES", "25"),
     ]
 
     toc_table = doc.add_table(rows=len(toc_data), cols=2)
@@ -432,12 +480,12 @@ def build_academic_report():
     figures = [
         ("Figure 1", "Geometric Principle of Optimization Duality on a 1D Cross-Section", "2"),
         ("Figure 2", "Dual-Optimization Sandbox: Architecture and Data Processing Pipeline", "9"),
-        ("Figure 3", "Dual-Optimization Sandbox UI Layout & Structural Panel Mapping", "12"),
-        ("Figure 4", "Step-by-Step User Demonstration Workflow Protocol", "13"),
-        ("Figure 5", "Symmetric Bowl Paraboloid Optimization Trajectories and Convergence Telemetry", "15"),
-        ("Figure 6", "Rosenbrock Valley Trajectory Oscillation and Step Velocity Profiles", "16"),
-        ("Figure 7", "Ackley Multimodal Function Local Basin Trapping and Radial Gradient Decay", "17"),
-        ("Figure 8", "Hyperbolic Saddle Point Orthogonal Descent/Ascent Path Separation", "18"),
+        ("Figure 3", "Dual-Optimization Sandbox UI Layout & Structural Panel Mapping", "15"),
+        ("Figure 4", "Step-by-Step User Demonstration Workflow Protocol", "16"),
+        ("Figure 5", "Symmetric Bowl Paraboloid Optimization Trajectories and Convergence Telemetry", "18"),
+        ("Figure 6", "Rosenbrock Valley Trajectory Oscillation and Step Velocity Profiles", "19"),
+        ("Figure 7", "Ackley Multimodal Function Local Basin Trapping and Radial Gradient Decay", "20"),
+        ("Figure 8", "Hyperbolic Saddle Point Orthogonal Descent/Ascent Path Separation", "21"),
     ]
     fig_table = doc.add_table(rows=len(figures), cols=3)
     fig_table.autofit = False
@@ -703,38 +751,183 @@ def build_academic_report():
     doc.add_page_break()
 
     # -------------------------------------------------------------------------
-    # 3.0 METHOD OF SOLUTIONS & SAFETY GUARDS
+    # 3.0 METHOD OF SOLUTIONS & CODE IMPLEMENTATION
     # -------------------------------------------------------------------------
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(14)
     p.paragraph_format.space_after = Pt(6)
-    r = p.add_run("3.0  METHOD OF SOLUTIONS & SAFETY GUARDS")
+    r = p.add_run("3.0  METHOD OF SOLUTIONS & CODE IMPLEMENTATION")
     r.bold = True
     r.font.size = Pt(14)
 
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(6)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("3.1  Iterative Update Mechanism")
+    r = p.add_run("3.1  Formal Pseudocode: Dual Optimization Engine")
     r.bold = True
     r.font.size = Pt(12)
 
     add_clean_paragraph(
         doc,
-        "The user selects a starting coordinate θ_0 = (x_0, y_0), a step size α (learning rate), and a maximum number of steps N_max. At each iteration step t, the engine records a complete telemetry row in a structured NumPy matrix:"
+        "The core logic of the dual optimization process is formalized in Algorithm 1. The procedure is completely generic: it accepts any differentiable landscape f, an initial coordinate vector θ₀, a learning rate α, an iteration budget N_max, a convergence tolerance ε, and an optimization mode (Descent or Ascent)."
     )
 
-    add_formula_card(
-        doc,
-        "NUMPY TELEMETRY MATRIX STRUCTURE",
-        "Row t = [ Step_Index ,  X_coord ,  Y_coord ,  Function_Value f(θ) ,  Gradient_Norm ||∇f|| ]",
-        "Every single step taken by both algorithms is permanently tracked. This allows the user to inspect the exact numbers, plot loss curves, and download a CSV file of the trajectory."
+    pseudocode_text = (
+        "ALGORITHM 1: DualOptimizationEngine(f, ∇f, θ₀, α, N_max, ε, mode)\n"
+        "------------------------------------------------------------------------\n"
+        "INPUT:  Objective f, Gradient ∇f, Start θ₀ = [x₀, y₀], Step size α,\n"
+        "        Max iterations N_max, Tolerance ε, Mode ∈ {'descent', 'ascent'}\n"
+        "OUTPUT: OptimizationResult with history matrix H, final status, metrics\n"
+        "------------------------------------------------------------------------\n"
+        "1:  Initialize coordinate vector: θ ← θ₀\n"
+        "2:  Initialize history list: H ← empty list\n"
+        "3:  status ← 'Max Iterations Reached'\n"
+        "4:  FOR t = 0 TO N_max DO:\n"
+        "5:      // 1. Numerical Explosion / Divergence Safety Guard\n"
+        "6:      IF is_nan(θ) OR is_inf(θ) OR max(|θ|) > 100,000 THEN\n"
+        "7:          status ← 'Diverged (NaN/Inf or Exploded)'\n"
+        "8:          BREAK\n"
+        "9:      END IF\n"
+        "10:     // 2. Evaluate Objective Function Value\n"
+        "11:     f_val ← f(θ[0], θ[1])\n"
+        "12:     IF is_nan(f_val) OR is_inf(f_val) OR |f_val| > 10^12 THEN\n"
+        "13:         status ← 'Diverged (Function Exploded)'\n"
+        "14:         BREAK\n"
+        "15:     END IF\n"
+        "16:     // 3. Compute Exact Analytical Gradient Vector & Euclidean Norm\n"
+        "17:     g_t ← ∇f(θ[0], θ[1])\n"
+        "18:     grad_norm ← sqrt(g_t[0]^2 + g_t[1]^2)\n"
+        "19:     // 4. Log Step Telemetry Row into Matrix\n"
+        "20:     H.append([t, θ[0], θ[1], f_val, grad_norm])\n"
+        "21:     // 5. Check Fermat Stationarity Convergence Stopping Rule\n"
+        "22:     IF grad_norm < ε THEN\n"
+        "23:         status ← 'Converged (||∇f|| < ε)'\n"
+        "24:         BREAK\n"
+        "25:     END IF\n"
+        "26:     IF t == N_max THEN BREAK END IF\n"
+        "27:     // 6. Parameter Update Step (Descent vs. Ascent Duality)\n"
+        "28:     IF mode == 'descent' THEN\n"
+        "29:         θ ← θ - α * g_t       // Step DOWNHILL opposite to gradient\n"
+        "30:     ELSE IF mode == 'ascent' THEN\n"
+        "31:         θ ← θ + α * g_t       // Step UPHILL along gradient\n"
+        "32:     END IF\n"
+        "33: END FOR\n"
+        "34: RETURN Structured Result(H, status, θ, f_val, grad_norm)"
     )
+    add_code_block(doc, "ALGORITHM 1: DUAL OPTIMIZATION ENGINE PSEUDOCODE", pseudocode_text, "Pseudocode")
 
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("3.2  Convergence Stopping Rule (||∇f|| < ε)")
+    r = p.add_run("3.2  Pure NumPy Optimization Backend (engine.py)")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "The mathematical optimization backend is encapsulated in engine.py as a clean, generic class OptimizationEngine. It relies exclusively on vectorized NumPy array operations without external ML dependencies. Below is the exact implementation of the step update and execution loop:"
+    )
+
+    py_engine_code = (
+        "import numpy as np\n"
+        "from dataclasses import dataclass\n"
+        "from enum import Enum\n\n"
+        "class OptimizationMode(str, Enum):\n"
+        "    DESCENT = 'descent'\n"
+        "    ASCENT = 'ascent'\n\n"
+        "class OptimizationEngine:\n"
+        "    def __init__(self, coord_threshold=1e5, val_threshold=1e12):\n"
+        "        self.coord_threshold = coord_threshold\n"
+        "        self.val_threshold = val_threshold\n\n"
+        "    def step(self, theta: np.ndarray, grad: np.ndarray, alpha: float, mode: OptimizationMode):\n"
+        "        if mode == OptimizationMode.DESCENT:\n"
+        "            return theta - alpha * grad   # Minus: DOWNHILL (Minimizing)\n"
+        "        elif mode == OptimizationMode.ASCENT:\n"
+        "            return theta + alpha * grad   # Plus:  UPHILL   (Maximizing)\n\n"
+        "    def optimize(self, landscape, initial_point, mode='descent', lr=0.05, max_iter=200, tol=1e-5):\n"
+        "        theta = np.array(initial_point, dtype=float)\n"
+        "        history = []\n"
+        "        status = 'Max Iterations Reached'\n\n"
+        "        for t in range(max_iter + 1):\n"
+        "            # 1. Divergence / Explosion guard\n"
+        "            if np.isnan(theta).any() or np.isinf(theta).any() or np.max(np.abs(theta)) > self.coord_threshold:\n"
+        "                status = 'Diverged (NaN/Inf or Exploded)'; break\n\n"
+        "            # 2. Objective evaluation & safety check\n"
+        "            f_val = float(landscape.evaluate(theta[0], theta[1]))\n"
+        "            if np.isnan(f_val) or np.isinf(f_val) or abs(f_val) > self.val_threshold:\n"
+        "                status = 'Diverged (Function Exploded)'; break\n\n"
+        "            # 3. Exact analytical gradient & Euclidean norm\n"
+        "            grad = np.array(landscape.gradient(theta[0], theta[1]), dtype=float)\n"
+        "            grad_norm = float(np.linalg.norm(grad))\n"
+        "            history.append([float(t), theta[0], theta[1], f_val, grad_norm])\n\n"
+        "            # 4. Convergence check (Fermat stationarity: ||∇f|| < tolerance)\n"
+        "            if grad_norm < tol:\n"
+        "                status = 'Converged'; break\n"
+        "            if t == max_iter: break\n\n"
+        "            # 5. Parameter update step\n"
+        "            theta = self.step(theta, grad, lr, mode)\n\n"
+        "        return OptimizationResult(mode=mode, status=status, history=np.array(history))\n\n"
+        "    def run_dual(self, landscape, initial_point, lr, max_iter, tol=1e-5):\n"
+        "        # Simultaneously triggers both routines from identical coordinates\n"
+        "        desc = self.optimize(landscape, initial_point, OptimizationMode.DESCENT, lr, max_iter, tol)\n"
+        "        asc  = self.optimize(landscape, initial_point, OptimizationMode.ASCENT,  lr, max_iter, tol)\n"
+        "        return desc, asc"
+    )
+    add_code_block(doc, "ENGINE.PY: PURE NUMPY OPTIMIZATION ENGINE BACKEND", py_engine_code)
+
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("3.3  Analytic Topologies & Gradients Backend (landscapes.py)")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "In landscapes.py, each surface is structured as an immutable Landscape object providing vectorized evaluate(x, y) and exact gradient(x, y) functions. Below are the analytic Python implementations:"
+    )
+
+    py_landscapes_code = (
+        "import numpy as np\n"
+        "from dataclasses import dataclass\n"
+        "from typing import Callable\n\n"
+        "@dataclass\n"
+        "class Landscape:\n"
+        "    name: str; id: str; default_bounds: tuple; default_start: tuple; default_lr: float\n"
+        "    evaluate_fn: Callable; gradient_fn: Callable\n"
+        "    def evaluate(self, x, y): return self.evaluate_fn(x, y)\n"
+        "    def gradient(self, x, y): return self.gradient_fn(x, y)\n\n"
+        "# 1. Symmetric Bowl (Paraboloid): f(x, y) = x^2 + y^2\n"
+        "bowl_eval = lambda x, y: x**2 + y**2\n"
+        "bowl_grad = lambda x, y: np.array([2.0 * x, 2.0 * y], dtype=float)\n\n"
+        "# 2. Rosenbrock Valley: f(x, y) = (1 - x)^2 + 100*(y - x^2)^2\n"
+        "rosen_eval = lambda x, y: (1.0 - x)**2 + 100.0 * (y - x**2)**2\n"
+        "def rosen_grad(x, y):\n"
+        "    dx = -2.0 * (1.0 - x) - 400.0 * x * (y - x**2)\n"
+        "    dy = 200.0 * (y - x**2)\n"
+        "    return np.array([dx, dy], dtype=float)\n\n"
+        "# 3. Ackley's Function (Multimodal Surface with nested trigonometric ripples)\n"
+        "def ackley_eval(x, y):\n"
+        "    r = np.sqrt(0.5 * (x**2 + y**2))\n"
+        "    return -20.0*np.exp(-0.2*r) - np.exp(0.5*(np.cos(2*np.pi*x) + np.cos(2*np.pi*y))) + np.e + 20.0\n"
+        "def ackley_grad(x, y):\n"
+        "    r = np.sqrt(0.5 * (x**2 + y**2))\n"
+        "    exp_trig = np.exp(0.5 * (np.cos(2*np.pi*x) + np.cos(2*np.pi*y)))\n"
+        "    if np.isclose(r, 0.0): dx_r, dy_r = 0.0, 0.0\n"
+        "    else: dx_r = (2.0*x/r)*np.exp(-0.2*r); dy_r = (2.0*y/r)*np.exp(-0.2*r)\n"
+        "    dx = dx_r + np.pi * np.sin(2*np.pi*x) * exp_trig\n"
+        "    dy = dy_r + np.pi * np.sin(2*np.pi*y) * exp_trig\n"
+        "    return np.array([dx, dy], dtype=float)\n\n"
+        "# 4. Hyperbolic Saddle Point: f(x, y) = x^2 - y^2\n"
+        "saddle_eval = lambda x, y: x**2 - y**2\n"
+        "saddle_grad = lambda x, y: np.array([2.0 * x, -2.0 * y], dtype=float)"
+    )
+    add_code_block(doc, "LANDSCAPES.PY: EXACT ANALYTIC GRADIENTS IN NUMPY", py_landscapes_code)
+
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("3.4  Convergence Stopping Rule (||∇f|| < ε)")
     r.bold = True
     r.font.size = Pt(12)
 
@@ -753,7 +946,7 @@ def build_academic_report():
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("3.3  Numerical Divergence & Overflow Protection")
+    r = p.add_run("3.5  Numerical Divergence Guards & Overflow Interception")
     r.bold = True
     r.font.size = Pt(12)
 
@@ -776,14 +969,35 @@ def build_academic_report():
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("3.4  Interactive Visualization Architecture")
+    r = p.add_run("3.6  Interactive Dashboard Implementation (app.py)")
     r.bold = True
     r.font.size = Pt(12)
 
     add_clean_paragraph(
         doc,
-        "The web interface is built using Streamlit and Plotly. The 2D contour canvas displays elevation contours using the Viridis color spectrum. Gradient Descent is plotted as a bright Electric Cyan (#00F0FF) trail, while Gradient Ascent is plotted as an Intense Magenta (#FF007A) trail. An interactive click-listener captures user mouse clicks on the map, allowing anyone to drop a new start point θ_0 and watch the simulation re-run in milliseconds."
+        "In app.py, Streamlit manages state via st.session_state while Plotly renders the interactive 2D contour mesh and 3D surface projections. Crucially, coordinate capture is implemented using Plotly's on_select='rerun' callback:"
     )
+
+    py_app_code = (
+        "# Interactive click-to-pick coordinate capture in app.py\n"
+        "chart_event = st.plotly_chart(\n"
+        "    fig_2d,\n"
+        "    use_container_width=True,\n"
+        "    key='contour_map_view',\n"
+        "    on_select='rerun',\n"
+        "    selection_mode=['points']\n"
+        ")\n\n"
+        "if chart_event and 'selection' in chart_event and chart_event['selection']:\n"
+        "    points = chart_event['selection'].get('points', [])\n"
+        "    if points:\n"
+        "        new_x = points[0].get('x')\n"
+        "        new_y = points[0].get('y')\n"
+        "        if new_x is not None and new_y is not None:\n"
+        "            st.session_state.start_x = round(new_x, 3)\n"
+        "            st.session_state.start_y = round(new_y, 3)\n"
+        "            st.rerun()  # Triggers instant re-optimization from clicked coordinate"
+    )
+    add_code_block(doc, "APP.PY: REAL-TIME CLICK-TO-PICK COORDINATE LISTENER", py_app_code)
 
     doc.add_page_break()
 
@@ -882,7 +1096,7 @@ def build_academic_report():
     doc.add_page_break()
 
     # -------------------------------------------------------------------------
-    # 5.0 RESULT AND DISCUSSION (Empirical Results following Demonstration)
+    # 5.0 RESULT AND DISCUSSION
     # -------------------------------------------------------------------------
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(14)
@@ -1163,7 +1377,7 @@ def build_academic_report():
 
     output_path = os.path.join(os.path.dirname(__file__), "CS2806_Calculus_Project_Report_Dual_Optimization.docx")
     doc.save(output_path)
-    print("🎉 Successfully built chronologically ordered report:", output_path)
+    print("🎉 Successfully built complete report with Code Implementation & Pseudocode:", output_path)
 
 
 if __name__ == "__main__":
