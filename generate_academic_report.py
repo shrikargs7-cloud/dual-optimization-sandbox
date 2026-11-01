@@ -1,14 +1,15 @@
 """
 Script to generate the complete, exhaustive Academic Project Report in Microsoft Word (.docx) format.
-Chronological Section Order with Code Implementation & Pseudocode:
+Chronological Section Order with Code Implementation & Pythonic Pseudocode:
 - 1.0 INTRODUCTION
 - 2.0 THE MODEL & MATHEMATICAL FORMULATION
-- 3.0 METHOD OF SOLUTIONS, ALGORITHM PSEUDOCODE & CODE IMPLEMENTATION
-    ├── 3.1 Dual-Optimization Algorithm & Formal Pseudocode
-    ├── 3.2 Pure Vectorized NumPy Implementation (OptimizationEngine)
-    ├── 3.3 Analytic Landscape Implementations & Exact Partial Derivatives
-    ├── 3.4 Numerical Divergence Guards & Overflow Interception
-    └── 3.5 Interactive UI Implementation Architecture
+- 3.0 METHOD OF SOLUTIONS & CODE IMPLEMENTATION
+    ├── 3.1 Pythonic Pseudocode: Dual Optimization Engine (Algorithm 1)
+    ├── 3.2 Pure NumPy Optimization Backend (engine.py)
+    ├── 3.3 Analytic Topologies & Gradients Backend (landscapes.py)
+    ├── 3.4 Convergence Stopping Rule (||∇f|| < ε)
+    ├── 3.5 Numerical Divergence Guards & Overflow Interception
+    └── 3.6 Interactive UI Implementation Architecture (app.py)
 - 4.0 SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH
 - 5.0 RESULT AND DISCUSSION (Empirical Case Studies & Comparisons)
 - 6.0 CONCLUSION
@@ -391,7 +392,7 @@ def build_academic_report():
     doc.add_page_break()
 
     # -------------------------------------------------------------------------
-    # PAGE 4: TABLE OF CONTENTS (Updated with Section 3.0 Code Implementation)
+    # PAGE 4: TABLE OF CONTENTS (Updated with Pythonic Pseudocode)
     # -------------------------------------------------------------------------
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -418,7 +419,7 @@ def build_academic_report():
         ("         2.2.4 Hyperbolic Saddle Point", "8"),
         ("    2.3  System Architecture and Processing Pipeline", "9"),
         ("3.0  METHOD OF SOLUTIONS & CODE IMPLEMENTATION", "10"),
-        ("    3.1  Formal Pseudocode: Dual Optimization Engine", "10"),
+        ("    3.1  Pythonic Pseudocode: Dual Optimization Routine", "10"),
         ("    3.2  Pure NumPy Optimization Backend (engine.py)", "11"),
         ("    3.3  Analytic Topologies & Gradients Backend (landscapes.py)", "12"),
         ("    3.4  Convergence Stopping Rule (||∇f|| < ε)", "13"),
@@ -763,58 +764,68 @@ def build_academic_report():
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(6)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("3.1  Formal Pseudocode: Dual Optimization Engine")
+    r = p.add_run("3.1  Pythonic Pseudocode: Dual Optimization Routine")
     r.bold = True
     r.font.size = Pt(12)
 
     add_clean_paragraph(
         doc,
-        "The core logic of the dual optimization process is formalized in Algorithm 1. The procedure is completely generic: it accepts any differentiable landscape f, an initial coordinate vector θ₀, a learning rate α, an iteration budget N_max, a convergence tolerance ε, and an optimization mode (Descent or Ascent)."
+        "To bridge abstract mathematical calculus with practical computer implementation, Algorithm 1 expresses the dual optimization process in standard Python-like pseudocode. It clearly defines the loop structure, active safety breaks, gradient evaluation, telemetry matrix accumulation, and the dual parameter update step:"
     )
 
-    pseudocode_text = (
-        "ALGORITHM 1: DualOptimizationEngine(f, ∇f, θ₀, α, N_max, ε, mode)\n"
-        "------------------------------------------------------------------------\n"
-        "INPUT:  Objective f, Gradient ∇f, Start θ₀ = [x₀, y₀], Step size α,\n"
-        "        Max iterations N_max, Tolerance ε, Mode ∈ {'descent', 'ascent'}\n"
-        "OUTPUT: OptimizationResult with history matrix H, final status, metrics\n"
-        "------------------------------------------------------------------------\n"
-        "1:  Initialize coordinate vector: θ ← θ₀\n"
-        "2:  Initialize history list: H ← empty list\n"
-        "3:  status ← 'Max Iterations Reached'\n"
-        "4:  FOR t = 0 TO N_max DO:\n"
-        "5:      // 1. Numerical Explosion / Divergence Safety Guard\n"
-        "6:      IF is_nan(θ) OR is_inf(θ) OR max(|θ|) > 100,000 THEN\n"
-        "7:          status ← 'Diverged (NaN/Inf or Exploded)'\n"
-        "8:          BREAK\n"
-        "9:      END IF\n"
-        "10:     // 2. Evaluate Objective Function Value\n"
-        "11:     f_val ← f(θ[0], θ[1])\n"
-        "12:     IF is_nan(f_val) OR is_inf(f_val) OR |f_val| > 10^12 THEN\n"
-        "13:         status ← 'Diverged (Function Exploded)'\n"
-        "14:         BREAK\n"
-        "15:     END IF\n"
-        "16:     // 3. Compute Exact Analytical Gradient Vector & Euclidean Norm\n"
-        "17:     g_t ← ∇f(θ[0], θ[1])\n"
-        "18:     grad_norm ← sqrt(g_t[0]^2 + g_t[1]^2)\n"
-        "19:     // 4. Log Step Telemetry Row into Matrix\n"
-        "20:     H.append([t, θ[0], θ[1], f_val, grad_norm])\n"
-        "21:     // 5. Check Fermat Stationarity Convergence Stopping Rule\n"
-        "22:     IF grad_norm < ε THEN\n"
-        "23:         status ← 'Converged (||∇f|| < ε)'\n"
-        "24:         BREAK\n"
-        "25:     END IF\n"
-        "26:     IF t == N_max THEN BREAK END IF\n"
-        "27:     // 6. Parameter Update Step (Descent vs. Ascent Duality)\n"
-        "28:     IF mode == 'descent' THEN\n"
-        "29:         θ ← θ - α * g_t       // Step DOWNHILL opposite to gradient\n"
-        "30:     ELSE IF mode == 'ascent' THEN\n"
-        "31:         θ ← θ + α * g_t       // Step UPHILL along gradient\n"
-        "32:     END IF\n"
-        "33: END FOR\n"
-        "34: RETURN Structured Result(H, status, θ, f_val, grad_norm)"
+    py_pseudocode_text = (
+        "def run_dual_optimization(landscape, start_point=(x0, y0), alpha=0.05, max_steps=200, tol=1e-5):\n"
+        "    \"\"\"\n"
+        "    Pythonic Pseudocode for Simultaneous Gradient Descent and Ascent.\n"
+        "    \"\"\"\n"
+        "    results = {}\n"
+        "    for mode in ['descent', 'ascent']:\n"
+        "        # 1. Initialize coordinate vector and telemetry storage\n"
+        "        theta = np.array(start_point, dtype=float)   # [x, y]\n"
+        "        history = []\n"
+        "        status = 'Max Iterations Reached'\n"
+        "\n"
+        "        # 2. Main iterative loop\n"
+        "        for t in range(max_steps + 1):\n"
+        "            # Safety Guard A: Check for NaN / Inf coordinate explosion\n"
+        "            if np.isnan(theta).any() or np.isinf(theta).any() or np.max(np.abs(theta)) > 1e5:\n"
+        "                status = 'Diverged (Coordinates Exploded)'\n"
+        "                break\n"
+        "\n"
+        "            # Evaluate objective function value f(x, y)\n"
+        "            f_val = landscape.evaluate(theta[0], theta[1])\n"
+        "\n"
+        "            # Safety Guard B: Check for objective overflow\n"
+        "            if np.isnan(f_val) or np.isinf(f_val) or abs(f_val) > 1e12:\n"
+        "                status = 'Diverged (Function Exploded)'\n"
+        "                break\n"
+        "\n"
+        "            # Compute exact analytical gradient vector and Euclidean norm\n"
+        "            grad = landscape.gradient(theta[0], theta[1])   # [df/dx, df/dy]\n"
+        "            grad_norm = np.linalg.norm(grad)                # sqrt(dx^2 + dy^2)\n"
+        "\n"
+        "            # Record step telemetry matrix: [Step, X, Y, Cost/Reward, Slope_Length]\n"
+        "            history.append([t, theta[0], theta[1], f_val, grad_norm])\n"
+        "\n"
+        "            # Convergence Check: Fermat Stationarity (flat ground)\n"
+        "            if grad_norm < tol:\n"
+        "                status = 'Converged'\n"
+        "                break\n"
+        "\n"
+        "            if t == max_steps:\n"
+        "                break\n"
+        "\n"
+        "            # 3. Dual Parameter Step Update\n"
+        "            if mode == 'descent':\n"
+        "                theta = theta - alpha * grad   # Minus: Step DOWNHILL into valley\n"
+        "            elif mode == 'ascent':\n"
+        "                theta = theta + alpha * grad   # Plus:  Step UPHILL toward summit\n"
+        "\n"
+        "        results[mode] = {'status': status, 'history': np.array(history)}\n"
+        "\n"
+        "    return results['descent'], results['ascent']"
     )
-    add_code_block(doc, "ALGORITHM 1: DUAL OPTIMIZATION ENGINE PSEUDOCODE", pseudocode_text, "Pseudocode")
+    add_code_block(doc, "ALGORITHM 1: PYTHONIC PSEUDOCODE FOR DUAL OPTIMIZATION", py_pseudocode_text, "Pythonic Pseudocode")
 
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
@@ -900,11 +911,11 @@ def build_academic_report():
         "# 1. Symmetric Bowl (Paraboloid): f(x, y) = x^2 + y^2\n"
         "bowl_eval = lambda x, y: x**2 + y**2\n"
         "bowl_grad = lambda x, y: np.array([2.0 * x, 2.0 * y], dtype=float)\n\n"
-        "# 2. Rosenbrock Valley: f(x, y) = (1 - x)^2 + 100*(y - x^2)^2\n"
-        "rosen_eval = lambda x, y: (1.0 - x)**2 + 100.0 * (y - x**2)**2\n"
+        "# 2. Rosenbrock Valley: f(x, y) = (1 - x)^2 + 100*(y - x^2)**2\n"
+        "rosen_eval = lambda x, y: (1.0 - x)**2 + 100.0 * (y - x^2)**2\n"
         "def rosen_grad(x, y):\n"
-        "    dx = -2.0 * (1.0 - x) - 400.0 * x * (y - x**2)\n"
-        "    dy = 200.0 * (y - x**2)\n"
+        "    dx = -2.0 * (1.0 - x) - 400.0 * x * (y - x^2)\n"
+        "    dy = 200.0 * (y - x^2)\n"
         "    return np.array([dx, dy], dtype=float)\n\n"
         "# 3. Ackley's Function (Multimodal Surface with nested trigonometric ripples)\n"
         "def ackley_eval(x, y):\n"
@@ -1377,7 +1388,7 @@ def build_academic_report():
 
     output_path = os.path.join(os.path.dirname(__file__), "CS2806_Calculus_Project_Report_Dual_Optimization.docx")
     doc.save(output_path)
-    print("🎉 Successfully built complete report with Code Implementation & Pseudocode:", output_path)
+    print("🎉 Successfully built complete report with Pythonic Pseudocode:", output_path)
 
 
 if __name__ == "__main__":
