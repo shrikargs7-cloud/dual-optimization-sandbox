@@ -1,12 +1,14 @@
 """
 Script to generate the complete, exhaustive Academic Project Report in Microsoft Word (.docx) format.
-Features:
-- Fixed font typography & consistent 1.15 line spacing with explicit zero run-on padding.
-- Dedicated comprehensive Section 5.0: "SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH"
-  illustrating exactly how a user operates the dashboard step-by-step.
-- Visual Diagrams: Figure 1 (Duality), Figure 2 (Architecture), Figure 3 (Dashboard UI Layout),
-  Figure 4 (User Workflow Protocol), Figure 5 (Bowl), Figure 6 (Rosenbrock), Figure 7 (Ackley), Figure 8 (Saddle).
-- Plain, intuitive, conversational language paired with exact formal mathematical cards.
+Chronological Section Order:
+- 1.0 INTRODUCTION
+- 2.0 THE MODEL & MATHEMATICAL FORMULATION
+- 3.0 METHOD OF SOLUTIONS & SAFETY GUARDS
+- 4.0 SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH (How the user operates the system)
+- 5.0 RESULT AND DISCUSSION (The empirical observations & mathematical outcomes from the demonstration)
+- 6.0 CONCLUSION
+- 7.0 FUTURE SCOPE
+- REFERENCES
 """
 
 import os
@@ -44,7 +46,6 @@ def add_formula_card(doc, formula_title, formula_text, plain_explanation=""):
     set_cell_shading(cell, "F8FAFC")
     set_cell_margins(cell, top=140, bottom=140, left=200, right=200)
 
-    # Accent left border
     tcPr = cell._tc.get_or_add_tcPr()
     borders = parse_xml(
         f'<w:tcBorders {nsdecls("w")}>\n'
@@ -99,7 +100,7 @@ def add_takeaway_card(doc, title, text):
     tbl = doc.add_table(rows=1, cols=1)
     tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     cell = tbl.cell(0, 0)
-    set_cell_shading(cell, "FEFCE8")  # Soft amber
+    set_cell_shading(cell, "FEFCE8")
     set_cell_margins(cell, top=120, bottom=120, left=180, right=180)
 
     tcPr = cell._tc.get_or_add_tcPr()
@@ -173,7 +174,6 @@ def add_image_with_caption(doc, filename, caption_text, width_inches=5.8):
 def build_academic_report():
     doc = Document()
 
-    # Page Margins: Standard 1-inch on all sides
     for s in doc.sections:
         s.top_margin = Inches(1.0)
         s.bottom_margin = Inches(1.0)
@@ -345,7 +345,7 @@ def build_academic_report():
     doc.add_page_break()
 
     # -------------------------------------------------------------------------
-    # PAGE 4: TABLE OF CONTENTS
+    # PAGE 4: TABLE OF CONTENTS (Chronological Sequence)
     # -------------------------------------------------------------------------
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -376,16 +376,16 @@ def build_academic_report():
         ("    3.2  Convergence Stopping Rule (||∇f|| < ε)", "10"),
         ("    3.3  Numerical Divergence & Overflow Protection", "11"),
         ("    3.4  Interactive Visualization Architecture", "11"),
-        ("4.0  RESULT AND DISCUSSION", "12"),
-        ("    4.1  Case Study 1: The Symmetric Bowl (Smooth Linear Convergence)", "12"),
-        ("    4.2  Case Study 2: Rosenbrock Valley (Cross-Canyon Oscillation)", "13"),
-        ("    4.3  Case Study 3: Ackley's Surface (Trapped in Local Basins)", "14"),
-        ("    4.4  Case Study 4: Hyperbolic Saddle Point (Orthogonal Trajectories)", "15"),
-        ("    4.5  Comparative Summary Table", "16"),
-        ("5.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH", "17"),
-        ("    5.1  User Interface Structural Breakdown (The 3 Panels)", "17"),
-        ("    5.2  Step-by-Step Live Demonstration Protocol", "18"),
-        ("    5.3  Real-Time Interactive Telemetry & CSV Export", "19"),
+        ("4.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH", "12"),
+        ("    4.1  User Interface Structural Breakdown (The 3 Panels)", "12"),
+        ("    4.2  Step-by-Step Live Demonstration Protocol", "13"),
+        ("    4.3  Real-Time Interactive Telemetry & CSV Export", "14"),
+        ("5.0  RESULT AND DISCUSSION", "15"),
+        ("    5.1  Case Study 1: The Symmetric Bowl (Smooth Linear Convergence)", "15"),
+        ("    5.2  Case Study 2: Rosenbrock Valley (Cross-Canyon Oscillation)", "16"),
+        ("    5.3  Case Study 3: Ackley's Surface (Trapped in Local Basins)", "17"),
+        ("    5.4  Case Study 4: Hyperbolic Saddle Point (Orthogonal Trajectories)", "18"),
+        ("    5.5  Comparative Quantitative Telemetry Summary", "19"),
         ("6.0  CONCLUSION", "20"),
         ("7.0  FUTURE SCOPE", "21"),
         ("REFERENCES", "22"),
@@ -432,12 +432,12 @@ def build_academic_report():
     figures = [
         ("Figure 1", "Geometric Principle of Optimization Duality on a 1D Cross-Section", "2"),
         ("Figure 2", "Dual-Optimization Sandbox: Architecture and Data Processing Pipeline", "9"),
-        ("Figure 3", "Symmetric Bowl Paraboloid Optimization Trajectories and Convergence Telemetry", "12"),
-        ("Figure 4", "Rosenbrock Valley Trajectory Oscillation and Step Velocity Profiles", "13"),
-        ("Figure 5", "Ackley Multimodal Function Local Basin Trapping and Radial Gradient Decay", "14"),
-        ("Figure 6", "Hyperbolic Saddle Point Orthogonal Descent/Ascent Path Separation", "15"),
-        ("Figure 7", "Dual-Optimization Sandbox UI Layout & Structural Panel Mapping", "17"),
-        ("Figure 8", "Step-by-Step User Demonstration Workflow Protocol", "18"),
+        ("Figure 3", "Dual-Optimization Sandbox UI Layout & Structural Panel Mapping", "12"),
+        ("Figure 4", "Step-by-Step User Demonstration Workflow Protocol", "13"),
+        ("Figure 5", "Symmetric Bowl Paraboloid Optimization Trajectories and Convergence Telemetry", "15"),
+        ("Figure 6", "Rosenbrock Valley Trajectory Oscillation and Step Velocity Profiles", "16"),
+        ("Figure 7", "Ackley Multimodal Function Local Basin Trapping and Radial Gradient Decay", "17"),
+        ("Figure 8", "Hyperbolic Saddle Point Orthogonal Descent/Ascent Path Separation", "18"),
     ]
     fig_table = doc.add_table(rows=len(figures), cols=3)
     fig_table.autofit = False
@@ -788,32 +788,126 @@ def build_academic_report():
     doc.add_page_break()
 
     # -------------------------------------------------------------------------
-    # 4.0 RESULT AND DISCUSSION
+    # 4.0 SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH
     # -------------------------------------------------------------------------
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(14)
     p.paragraph_format.space_after = Pt(6)
-    r = p.add_run("4.0  RESULT AND DISCUSSION")
+    r = p.add_run("4.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH")
     r.bold = True
     r.font.size = Pt(14)
 
-    # 4.1 Bowl Case
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(6)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("4.1  Case Study 1: The Symmetric Bowl (Smooth Linear Convergence)")
+    r = p.add_run("4.1  User Interface Structural Breakdown (The 3 Panels)")
     r.bold = True
     r.font.size = Pt(12)
 
     add_clean_paragraph(
         doc,
-        "We initialize both algorithms at point θ_0 = (3.0, 2.5) with a learning rate α = 0.1. Figure 3 shows the resulting trajectories."
+        "To make the mathematical theory accessible, intuitive, and visually engaging, the Dual-Optimization Sandbox is organized into three distinct, synchronized structural panels as illustrated in Figure 3:"
+    )
+
+    add_image_with_caption(
+        doc,
+        "diagram3_dashboard_demo.png",
+        "Figure 3: Dual-Optimization Sandbox UI Layout & Structural Panel Mapping (Controls, Canvas, and Telemetry)."
+    )
+
+    add_clean_paragraph(
+        doc,
+        "1. Left Control Panel (Sidebar): Houses all interactive hyperparameter controls. Users can select any of the 4 topological surfaces from a dropdown menu, manually enter starting coordinates (x0, y0), adjust the Learning Rate slider (α ∈ [0.001, 1.5]), set maximum iteration limits (10 to 500 steps), and toggle convergence tolerances."
+    )
+    add_clean_paragraph(
+        doc,
+        "2. Center Interactive Canvas: Features a high-resolution 2D Plotly contour map paired with an alternate 3D Elevation Surface view. Crucially, the contour canvas includes an active click-event listener: clicking anywhere on the topographic map immediately captures the clicked coordinate as the new starting point θ₀ and automatically recalculates both descent and ascent trajectories in real time."
+    )
+    add_clean_paragraph(
+        doc,
+        "3. Right Telemetry Panel: Displays side-by-side comparative metric cards updated in real time. Each card reveals the final coordinate position, final cost/objective value, gradient length ||∇f||, total distance traveled, and a color-coded status badge ('Converged', 'Iteration Limit', or 'Diverged / Exploded')."
+    )
+
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("4.2  Step-by-Step Live Demonstration Protocol")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "When presenting or demonstrating the application during evaluations or peer walkthroughs, the user follows a 5-step interactive protocol shown in Figure 4:"
+    )
+
+    add_image_with_caption(
+        doc,
+        "diagram4_workflow_steps.png",
+        "Figure 4: Step-by-Step User Demonstration Workflow Protocol."
+    )
+
+    add_clean_paragraph(
+        doc,
+        "• Step 1 — Select Topology: The demonstrator selects a landscape from the dropdown. For example, starting with the Symmetric Bowl establishes the baseline duality, while switching to the Rosenbrock valley introduces anisotropic curvature."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 2 — Drop Starting Point θ₀: The user clicks anywhere on the 2D contour map. A bright Yellow Star instantly snaps to the clicked coordinates, and both algorithms trigger simultaneously."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 3 — Tune Step Size (α): The demonstrator moves the Learning Rate slider. By increasing α slightly on the Rosenbrock landscape, the audience visually witnesses the Cyan descent path begin to oscillate wildly and bounce off canyon walls."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 4 — Time Scrubbing: The demonstrator drags the 'Trajectory Playback Scrubber' across the top of the canvas, replaying the simulation frame-by-frame from step t = 0 to step t = max."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 5 — Inspect Telemetry: The audience inspects the real-time Loss Curves, Log-scale Gradient Norms, and Step Velocities (||Δθ||) in the right panel, confirming mathematical convergence or divergence."
+    )
+
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("4.3  Real-Time Interactive Telemetry & CSV Export")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "In addition to real-time visual charts, the dashboard provides complete data transparency. Expanding the bottom 'Detailed NumPy Telemetry History Matrix' reveals full numerical dataframes for both Descent and Ascent. Users can click '⬇️ Download CSV' to export the raw data tables [Iteration, X, Y, f(x, y), ||∇f||] for independent offline analysis in tools like Excel, MATLAB, or Jupyter Notebooks."
+    )
+
+    doc.add_page_break()
+
+    # -------------------------------------------------------------------------
+    # 5.0 RESULT AND DISCUSSION (Empirical Results following Demonstration)
+    # -------------------------------------------------------------------------
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(14)
+    p.paragraph_format.space_after = Pt(6)
+    r = p.add_run("5.0  RESULT AND DISCUSSION")
+    r.bold = True
+    r.font.size = Pt(14)
+
+    # 5.1 Bowl Case
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(6)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("5.1  Case Study 1: The Symmetric Bowl (Smooth Linear Convergence)")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "We initialize both algorithms at point θ_0 = (3.0, 2.5) with a learning rate α = 0.1. Figure 5 shows the resulting trajectories."
     )
 
     add_image_with_caption(
         doc,
         "fig1_bowl.png",
-        "Figure 3: Symmetric Bowl Paraboloid Optimization Trajectories and Convergence Telemetry."
+        "Figure 5: Symmetric Bowl Paraboloid Optimization Trajectories and Convergence Telemetry."
     )
 
     add_clean_paragraph(
@@ -831,23 +925,23 @@ def build_academic_report():
         "Descent converges because the bowl has a bottom floor. Ascent explodes because the bowl has no ceiling. This proves why all loss functions in Deep Learning (like Mean Squared Error) must be designed with a minimum lower bound (f ≥ 0)."
     )
 
-    # 4.2 Rosenbrock Case
+    # 5.2 Rosenbrock Case
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("4.2  Case Study 2: Rosenbrock Valley (Cross-Canyon Oscillation)")
+    r = p.add_run("5.2  Case Study 2: Rosenbrock Valley (Cross-Canyon Oscillation)")
     r.bold = True
     r.font.size = Pt(12)
 
     add_clean_paragraph(
         doc,
-        "We initialize at θ_0 = (-1.5, 1.8) with α = 0.002. Figure 4 demonstrates what happens in an ill-conditioned valley."
+        "We initialize at θ_0 = (-1.5, 1.8) with α = 0.002. Figure 6 demonstrates what happens in an ill-conditioned valley."
     )
 
     add_image_with_caption(
         doc,
         "fig2_rosenbrock.png",
-        "Figure 4: Rosenbrock Valley Trajectory Oscillation and Step Velocity Profiles."
+        "Figure 6: Rosenbrock Valley Trajectory Oscillation and Step Velocity Profiles."
     )
 
     add_clean_paragraph(
@@ -865,23 +959,23 @@ def build_academic_report():
         "Vanilla gradient descent cannot handle ravines because it treats all directions with the exact same step size α. This proves why modern deep learning requires advanced optimizers like Adam and RMSprop that automatically shrink step sizes along steep directions while accelerating along flat directions."
     )
 
-    # 4.3 Ackley Case
+    # 5.3 Ackley Case
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("4.3  Case Study 3: Ackley's Surface (Trapped in Local Basins)")
+    r = p.add_run("5.3  Case Study 3: Ackley's Surface (Trapped in Local Basins)")
     r.bold = True
     r.font.size = Pt(12)
 
     add_clean_paragraph(
         doc,
-        "We initialize at θ_0 = (2.5, 2.5) with α = 0.05. Figure 5 illustrates the danger of local minima."
+        "We initialize at θ_0 = (2.5, 2.5) with α = 0.05. Figure 7 illustrates the danger of local minima."
     )
 
     add_image_with_caption(
         doc,
         "fig3_ackley.png",
-        "Figure 5: Ackley Multimodal Function Local Basin Trapping and Radial Gradient Decay."
+        "Figure 7: Ackley Multimodal Function Local Basin Trapping and Radial Gradient Decay."
     )
 
     add_clean_paragraph(
@@ -895,23 +989,23 @@ def build_academic_report():
         "Gradient Descent is myopic (short-sighted). It only inspects the slope under its current position. In bumpy landscapes, your starting point decides your fate. This proves why techniques like random restarts, momentum, and simulated annealing are essential in non-convex optimization."
     )
 
-    # 4.4 Saddle Case
+    # 5.4 Saddle Case
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("4.4  Case Study 4: Hyperbolic Saddle Point (Orthogonal Trajectories)")
+    r = p.add_run("5.4  Case Study 4: Hyperbolic Saddle Point (Orthogonal Trajectories)")
     r.bold = True
     r.font.size = Pt(12)
 
     add_clean_paragraph(
         doc,
-        "We initialize near the saddle point at θ_0 = (0.2, 0.2) with α = 0.1. Figure 6 shows the spatial separation."
+        "We initialize near the saddle point at θ_0 = (0.2, 0.2) with α = 0.1. Figure 8 shows the spatial separation."
     )
 
     add_image_with_caption(
         doc,
         "fig4_saddle.png",
-        "Figure 6: Hyperbolic Saddle Point Orthogonal Descent/Ascent Path Separation."
+        "Figure 8: Hyperbolic Saddle Point Orthogonal Descent/Ascent Path Separation."
     )
 
     add_clean_paragraph(
@@ -919,11 +1013,11 @@ def build_academic_report():
         "Because f(x, y) = x^2 - y^2, the gradient vector is [2x, -2y]^T. For Descent, the x-coordinate shrinks to 0 while the y-coordinate diverges downwards to -infinity. For Ascent, the exact reverse occurs: y shrinks to 0 while x diverges outwards to +infinity. The two trajectories move in strictly perpendicular (90-degree) paths."
     )
 
-    # 4.5 Quantitative Table
+    # 5.5 Quantitative Table
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("4.5  Comparative Summary Table")
+    r = p.add_run("5.5  Comparative Quantitative Telemetry Summary")
     r.bold = True
     r.font.size = Pt(12)
 
@@ -981,100 +1075,6 @@ def build_academic_report():
                 elif j == 1 and val == "Ascent":
                     r.font.bold = True
                     r.font.color.rgb = RGBColor(225, 29, 72)
-
-    doc.add_page_break()
-
-    # -------------------------------------------------------------------------
-    # 5.0 SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH
-    # -------------------------------------------------------------------------
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(14)
-    p.paragraph_format.space_after = Pt(6)
-    r = p.add_run("5.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH")
-    r.bold = True
-    r.font.size = Pt(14)
-
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(6)
-    p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("5.1  User Interface Structural Breakdown (The 3 Panels)")
-    r.bold = True
-    r.font.size = Pt(12)
-
-    add_clean_paragraph(
-        doc,
-        "To make the mathematical theory accessible, intuitive, and visually engaging, the Dual-Optimization Sandbox is organized into three distinct, synchronized structural panels as illustrated in Figure 7:"
-    )
-
-    add_image_with_caption(
-        doc,
-        "diagram3_dashboard_demo.png",
-        "Figure 7: Dual-Optimization Sandbox UI Layout & Structural Panel Mapping (Controls, Canvas, and Telemetry)."
-    )
-
-    add_clean_paragraph(
-        doc,
-        "1. Left Control Panel (Sidebar): Houses all interactive hyperparameter controls. Users can select any of the 4 topological surfaces from a dropdown menu, manually enter starting coordinates (x0, y0), adjust the Learning Rate slider (α ∈ [0.001, 1.5]), set maximum iteration limits (10 to 500 steps), and toggle convergence tolerances."
-    )
-    add_clean_paragraph(
-        doc,
-        "2. Center Interactive Canvas: Features a high-resolution 2D Plotly contour map paired with an alternate 3D Elevation Surface view. Crucially, the contour canvas includes an active click-event listener: clicking anywhere on the topographic map immediately captures the clicked coordinate as the new starting point θ₀ and automatically recalculates both descent and ascent trajectories in real time."
-    )
-    add_clean_paragraph(
-        doc,
-        "3. Right Telemetry Panel: Displays side-by-side comparative metric cards updated in real time. Each card reveals the final coordinate position, final cost/objective value, gradient length ||∇f||, total distance traveled, and a color-coded status badge ('Converged', 'Iteration Limit', or 'Diverged / Exploded')."
-    )
-
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(8)
-    p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("5.2  Step-by-Step Live Demonstration Protocol")
-    r.bold = True
-    r.font.size = Pt(12)
-
-    add_clean_paragraph(
-        doc,
-        "When presenting or demonstrating the application during evaluations or peer walkthroughs, the user follows a 5-step interactive protocol shown in Figure 8:"
-    )
-
-    add_image_with_caption(
-        doc,
-        "diagram4_workflow_steps.png",
-        "Figure 8: Step-by-Step User Demonstration Workflow Protocol."
-    )
-
-    add_clean_paragraph(
-        doc,
-        "• Step 1 — Select Topology: The demonstrator selects a landscape from the dropdown. For example, starting with the Symmetric Bowl establishes the baseline duality, while switching to the Rosenbrock valley introduces anisotropic curvature."
-    )
-    add_clean_paragraph(
-        doc,
-        "• Step 2 — Drop Starting Point θ₀: The user clicks anywhere on the 2D contour map. A bright Yellow Star instantly snaps to the clicked coordinates, and both algorithms trigger simultaneously."
-    )
-    add_clean_paragraph(
-        doc,
-        "• Step 3 — Tune Step Size (α): The demonstrator moves the Learning Rate slider. By increasing α slightly on the Rosenbrock landscape, the audience visually witnesses the Cyan descent path begin to oscillate wildly and bounce off canyon walls."
-    )
-    add_clean_paragraph(
-        doc,
-        "• Step 4 — Time Scrubbing: The demonstrator drags the 'Trajectory Playback Scrubber' across the top of the canvas, replaying the simulation frame-by-frame from step t = 0 to step t = max."
-    )
-    add_clean_paragraph(
-        doc,
-        "• Step 5 — Inspect Telemetry: The audience inspects the real-time Loss Curves, Log-scale Gradient Norms, and Step Velocities (||Δθ||) in the right panel, confirming mathematical convergence or divergence."
-    )
-
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(8)
-    p.paragraph_format.space_after = Pt(3)
-    r = p.add_run("5.3  Real-Time Interactive Telemetry & CSV Export")
-    r.bold = True
-    r.font.size = Pt(12)
-
-    add_clean_paragraph(
-        doc,
-        "In addition to real-time visual charts, the dashboard provides complete data transparency. Expanding the bottom 'Detailed NumPy Telemetry History Matrix' reveals full numerical dataframes for both Descent and Ascent. Users can click '⬇️ Download CSV' to export the raw data tables [Iteration, X, Y, f(x, y), ||∇f||] for independent offline analysis in tools like Excel, MATLAB, or Jupyter Notebooks."
-    )
 
     doc.add_page_break()
 
@@ -1163,7 +1163,7 @@ def build_academic_report():
 
     output_path = os.path.join(os.path.dirname(__file__), "CS2806_Calculus_Project_Report_Dual_Optimization.docx")
     doc.save(output_path)
-    print("🎉 Successfully built polished report with Section 5.0 Demonstration:", output_path)
+    print("🎉 Successfully built chronologically ordered report:", output_path)
 
 
 if __name__ == "__main__":
