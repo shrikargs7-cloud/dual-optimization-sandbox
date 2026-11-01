@@ -1,11 +1,12 @@
 """
-Script to generate the polished Academic Project Report in Microsoft Word (.docx) format.
+Script to generate the complete, exhaustive Academic Project Report in Microsoft Word (.docx) format.
 Features:
 - Fixed font typography & consistent 1.15 line spacing with explicit zero run-on padding.
-- Plain, intuitive, conversational explanations with clear real-world intuition.
-- Clear step-by-step breakdown of how Gradient Descent and Ascent work.
-- Explicit visual formula boxes for every topology and derivative.
-- Seamless inclusion of both conceptual architecture diagrams and empirical result figures.
+- Dedicated comprehensive Section 5.0: "SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH"
+  illustrating exactly how a user operates the dashboard step-by-step.
+- Visual Diagrams: Figure 1 (Duality), Figure 2 (Architecture), Figure 3 (Dashboard UI Layout),
+  Figure 4 (User Workflow Protocol), Figure 5 (Bowl), Figure 6 (Rosenbrock), Figure 7 (Ackley), Figure 8 (Saddle).
+- Plain, intuitive, conversational language paired with exact formal mathematical cards.
 """
 
 import os
@@ -381,9 +382,13 @@ def build_academic_report():
         ("    4.3  Case Study 3: Ackley's Surface (Trapped in Local Basins)", "14"),
         ("    4.4  Case Study 4: Hyperbolic Saddle Point (Orthogonal Trajectories)", "15"),
         ("    4.5  Comparative Summary Table", "16"),
-        ("6.0  CONCLUSION", "17"),
-        ("7.0  FUTURE SCOPE", "18"),
-        ("REFERENCES", "19"),
+        ("5.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH", "17"),
+        ("    5.1  User Interface Structural Breakdown (The 3 Panels)", "17"),
+        ("    5.2  Step-by-Step Live Demonstration Protocol", "18"),
+        ("    5.3  Real-Time Interactive Telemetry & CSV Export", "19"),
+        ("6.0  CONCLUSION", "20"),
+        ("7.0  FUTURE SCOPE", "21"),
+        ("REFERENCES", "22"),
     ]
 
     toc_table = doc.add_table(rows=len(toc_data), cols=2)
@@ -406,7 +411,7 @@ def build_academic_report():
         r1.font.name = "Times New Roman"
         r0.font.size = Pt(10.5)
         r1.font.size = Pt(10.5)
-        if item.startswith(("LIST", "1.0", "2.0", "3.0", "4.0", "6.0", "7.0", "REF")):
+        if item.startswith(("LIST", "1.0", "2.0", "3.0", "4.0", "5.0", "6.0", "7.0", "REF")):
             r0.bold = True
             r1.bold = True
 
@@ -431,6 +436,8 @@ def build_academic_report():
         ("Figure 4", "Rosenbrock Valley Trajectory Oscillation and Step Velocity Profiles", "13"),
         ("Figure 5", "Ackley Multimodal Function Local Basin Trapping and Radial Gradient Decay", "14"),
         ("Figure 6", "Hyperbolic Saddle Point Orthogonal Descent/Ascent Path Separation", "15"),
+        ("Figure 7", "Dual-Optimization Sandbox UI Layout & Structural Panel Mapping", "17"),
+        ("Figure 8", "Step-by-Step User Demonstration Workflow Protocol", "18"),
     ]
     fig_table = doc.add_table(rows=len(figures), cols=3)
     fig_table.autofit = False
@@ -978,6 +985,100 @@ def build_academic_report():
     doc.add_page_break()
 
     # -------------------------------------------------------------------------
+    # 5.0 SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH
+    # -------------------------------------------------------------------------
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(14)
+    p.paragraph_format.space_after = Pt(6)
+    r = p.add_run("5.0  SYSTEM DEMONSTRATION & OPERATIONAL WALKTHROUGH")
+    r.bold = True
+    r.font.size = Pt(14)
+
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(6)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("5.1  User Interface Structural Breakdown (The 3 Panels)")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "To make the mathematical theory accessible, intuitive, and visually engaging, the Dual-Optimization Sandbox is organized into three distinct, synchronized structural panels as illustrated in Figure 7:"
+    )
+
+    add_image_with_caption(
+        doc,
+        "diagram3_dashboard_demo.png",
+        "Figure 7: Dual-Optimization Sandbox UI Layout & Structural Panel Mapping (Controls, Canvas, and Telemetry)."
+    )
+
+    add_clean_paragraph(
+        doc,
+        "1. Left Control Panel (Sidebar): Houses all interactive hyperparameter controls. Users can select any of the 4 topological surfaces from a dropdown menu, manually enter starting coordinates (x0, y0), adjust the Learning Rate slider (α ∈ [0.001, 1.5]), set maximum iteration limits (10 to 500 steps), and toggle convergence tolerances."
+    )
+    add_clean_paragraph(
+        doc,
+        "2. Center Interactive Canvas: Features a high-resolution 2D Plotly contour map paired with an alternate 3D Elevation Surface view. Crucially, the contour canvas includes an active click-event listener: clicking anywhere on the topographic map immediately captures the clicked coordinate as the new starting point θ₀ and automatically recalculates both descent and ascent trajectories in real time."
+    )
+    add_clean_paragraph(
+        doc,
+        "3. Right Telemetry Panel: Displays side-by-side comparative metric cards updated in real time. Each card reveals the final coordinate position, final cost/objective value, gradient length ||∇f||, total distance traveled, and a color-coded status badge ('Converged', 'Iteration Limit', or 'Diverged / Exploded')."
+    )
+
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("5.2  Step-by-Step Live Demonstration Protocol")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "When presenting or demonstrating the application during evaluations or peer walkthroughs, the user follows a 5-step interactive protocol shown in Figure 8:"
+    )
+
+    add_image_with_caption(
+        doc,
+        "diagram4_workflow_steps.png",
+        "Figure 8: Step-by-Step User Demonstration Workflow Protocol."
+    )
+
+    add_clean_paragraph(
+        doc,
+        "• Step 1 — Select Topology: The demonstrator selects a landscape from the dropdown. For example, starting with the Symmetric Bowl establishes the baseline duality, while switching to the Rosenbrock valley introduces anisotropic curvature."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 2 — Drop Starting Point θ₀: The user clicks anywhere on the 2D contour map. A bright Yellow Star instantly snaps to the clicked coordinates, and both algorithms trigger simultaneously."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 3 — Tune Step Size (α): The demonstrator moves the Learning Rate slider. By increasing α slightly on the Rosenbrock landscape, the audience visually witnesses the Cyan descent path begin to oscillate wildly and bounce off canyon walls."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 4 — Time Scrubbing: The demonstrator drags the 'Trajectory Playback Scrubber' across the top of the canvas, replaying the simulation frame-by-frame from step t = 0 to step t = max."
+    )
+    add_clean_paragraph(
+        doc,
+        "• Step 5 — Inspect Telemetry: The audience inspects the real-time Loss Curves, Log-scale Gradient Norms, and Step Velocities (||Δθ||) in the right panel, confirming mathematical convergence or divergence."
+    )
+
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(3)
+    r = p.add_run("5.3  Real-Time Interactive Telemetry & CSV Export")
+    r.bold = True
+    r.font.size = Pt(12)
+
+    add_clean_paragraph(
+        doc,
+        "In addition to real-time visual charts, the dashboard provides complete data transparency. Expanding the bottom 'Detailed NumPy Telemetry History Matrix' reveals full numerical dataframes for both Descent and Ascent. Users can click '⬇️ Download CSV' to export the raw data tables [Iteration, X, Y, f(x, y), ||∇f||] for independent offline analysis in tools like Excel, MATLAB, or Jupyter Notebooks."
+    )
+
+    doc.add_page_break()
+
+    # -------------------------------------------------------------------------
     # 6.0 CONCLUSION
     # -------------------------------------------------------------------------
     p = doc.add_paragraph()
@@ -1062,7 +1163,7 @@ def build_academic_report():
 
     output_path = os.path.join(os.path.dirname(__file__), "CS2806_Calculus_Project_Report_Dual_Optimization.docx")
     doc.save(output_path)
-    print("🎉 Successfully built polished report:", output_path)
+    print("🎉 Successfully built polished report with Section 5.0 Demonstration:", output_path)
 
 
 if __name__ == "__main__":
