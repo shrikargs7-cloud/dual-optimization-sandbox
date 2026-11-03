@@ -75,3 +75,30 @@ streamlit run app.py
 ```bash
 python3 -m unittest discover -s . -p "test_*.py"
 ```
+
+
+---
+
+## 🔄 Optimization Engine Workflow
+
+```mermaid
+flowchart TD
+    Init[User Inputs Objective Function f(x, y) & Hyperparameters] --> Engine[NumPy Optimization Kernel]
+    
+    subgraph Computational Pipeline
+        Engine --> GradCalc[Vectorized Gradient Evaluation]
+        
+        GradCalc --> DescentBranch[📉 Gradient Descent Step: x := x - α * ∇f]
+        GradCalc --> AscentBranch[📈 Gradient Ascent Step: x := x + α * ∇f]
+        
+        DescentBranch --> Minima[Converges toward Local/Global Minimum]
+        AscentBranch --> Maxima[Converges toward Local/Global Maximum]
+    end
+
+    subgraph Visualization & Analytics
+        Minima & Maxima --> Plotly3D[Plotly 3D Surface & Contour Maps]
+        Minima & Maxima --> Metrics[Loss/Objective Curve vs. Iteration Step]
+    end
+
+    Plotly3D & Metrics --> StreamlitUI[Interactive Streamlit Dashboard]
+```
